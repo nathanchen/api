@@ -1,0 +1,22 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="info.chenqin.dao.todo.IListsDao">
+
+    <insert id="insertANewList">
+        INSERT ignore INTO lists (list_name, is_active)
+        VALUES (#{list_name}, 1);
+    </insert>
+
+    <update id="updateAListState">
+        UPDATE lists SET is_active = #{stateCode} WHERE list_id = #{list_id};
+    </update>
+
+    <select id="queryById" resultType="info.chenqin.entity.todo.ListsEntity" parameterType="long">
+        SELECT list_id, list_name FROM lists WHERE list_id = #{listId};
+    </select>
+
+    <select id="queryAll" resultType="info.chenqin.entity.todo.ListsEntity">
+        SELECT list_id, list_name FROM lists WHERE is_active = 1 ORDER BY create_time desc;
+    </select>
+</mapper>
