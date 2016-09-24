@@ -35,11 +35,13 @@ public class OSChinaIndexPageCrawler
             doc = Jsoup.connect(INDEX_PAGE_URL).userAgent("Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1").get();
             Elements todayNews = doc.select("li.today>a");
             OSChinaIndexPageNewsModel osChinaIndexPageNewsModel;
+            String href;
             for (Element aNews : todayNews)
             {
                 osChinaIndexPageNewsModel = new OSChinaIndexPageNewsModel();
                 osChinaIndexPageNewsModel.setTitle(aNews.text());
-                osChinaIndexPageNewsModel.setUrl(SITE_DOMAIN + aNews.attr("href"));
+                href = aNews.attr("href");
+                osChinaIndexPageNewsModel.setUrl((href.startsWith("http://") ? "" : SITE_DOMAIN) + href);
                 osChinaIndexPageNewsModelList.add(osChinaIndexPageNewsModel);
             }
         }
