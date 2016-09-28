@@ -9,17 +9,17 @@ import java.util.List;
 /**
  * User: nathanchen
  * <p>
- * Date: 23/9/16
+ * Date: 28/9/16
  * <p>
- * Time: 12:01 AM
+ * Time: 10:35 AM
  * <p>
  * Description:
  */
 @Service
-public class CurrencyExchangeCrawler extends BloombergFinancialDataPageCrawler
+public class StockMarketCrawler extends BloombergFinancialDataPageCrawler
 {
-    public List<BloombergFinancialDataInfoModel> crawlCurrencyExchangeInfoPage()
+    public List<BloombergFinancialDataInfoModel> crawlStockPricePages()
     {
-        return crawlFinancialInfoPages(DataPropertiesFileHelper.readCurrencyExchangeProperties());
+        return crawlFinancialInfoPages(DataPropertiesFileHelper.readStockProperties());
     }
 }

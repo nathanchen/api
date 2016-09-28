@@ -5,6 +5,7 @@ import info.chenqin.apiresponse.crawler.*;
 import info.chenqin.common.ApiResponseCodeEnum;
 import info.chenqin.service.crawler.CurrencyExchangeCrawler;
 import info.chenqin.service.crawler.OSChinaIndexPageCrawler;
+import info.chenqin.service.crawler.StockMarketCrawler;
 import info.chenqin.service.crawler.YahooWeatherCrawler;
 import info.chenqin.url.APIURL;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +42,9 @@ public class CrawlerController
     @Autowired
     private YahooWeatherCrawler yahooWeatherCrawler;
 
+    @Autowired
+    private StockMarketCrawler stockMarketCrawler;
+
     @ResponseBody
     @RequestMapping(value = APIURL.API_CRAWL_OSCHINA_INDEX_PAGE_URL, method = RequestMethod.GET)
     public OSChinaIndexPageCrawlerApiResponse crawlOSChinaIndexPage(@Valid @ModelAttribute() BaseAPIRequestModel baseAPIRequestModel, BindingResult bindingResult)
@@ -63,21 +67,41 @@ public class CrawlerController
 
     @ResponseBody
     @RequestMapping(value = APIURL.API_CURRENCY_EXCHANGE_RATE_URL, method = RequestMethod.GET)
-    public CurrencyExchangeRateCrawlerApiResponse getCurrencyExchangeRate(@Valid @ModelAttribute() BaseAPIRequestModel baseAPIRequestModel, BindingResult bindingResult)
+    public BloombergFinancialDataInfoApiResponse getCurrencyExchangeRate(@Valid @ModelAttribute() BaseAPIRequestModel baseAPIRequestModel, BindingResult bindingResult)
     {
         if (bindingResult.hasErrors())
         {
             log.warn("{} - {}", ApiResponseCodeEnum.REQUEST_PARAM_ERROR.getMsg(), baseAPIRequestModel);
-            return new CurrencyExchangeRateCrawlerApiResponse(ApiResponseCodeEnum.REQUEST_PARAM_ERROR.getCode(), ApiResponseCodeEnum.REQUEST_PARAM_ERROR.getMsg());
+            return new BloombergFinancialDataInfoApiResponse(ApiResponseCodeEnum.REQUEST_PARAM_ERROR.getCode(), ApiResponseCodeEnum.REQUEST_PARAM_ERROR.getMsg());
         }
-        CurrencyExchangeRateInfoModel currencyExchangeRateInfoModel = currencyExchangeCrawler.crawlCurrencyExchangeInfoPage();
-        if (currencyExchangeRateInfoModel != null)
+        List<BloombergFinancialDataInfoModel> bloombergFinancialDataInfoModelList = currencyExchangeCrawler.crawlCurrencyExchangeInfoPage();
+        if (bloombergFinancialDataInfoModelList != null)
         {
-            return new CurrencyExchangeRateCrawlerApiResponse(ApiResponseCodeEnum.SUCCESS.getCode(), currencyExchangeRateInfoModel);
+            return new BloombergFinancialDataInfoApiResponse(ApiResponseCodeEnum.SUCCESS.getCode(), bloombergFinancialDataInfoModelList);
         }
         else
         {
-            return new CurrencyExchangeRateCrawlerApiResponse(ApiResponseCodeEnum.CRAWLER_RETURNS_EMPTY.getCode(), ApiResponseCodeEnum.CRAWLER_RETURNS_EMPTY.getMsg());
+            return new BloombergFinancialDataInfoApiResponse(ApiResponseCodeEnum.CRAWLER_RETURNS_EMPTY.getCode(), ApiResponseCodeEnum.CRAWLER_RETURNS_EMPTY.getMsg());
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = APIURL.API_STOCK_PRICE_URL, method = RequestMethod.GET)
+    public BloombergFinancialDataInfoApiResponse getStockPrice(@Valid @ModelAttribute() BaseAPIRequestModel baseAPIRequestModel, BindingResult bindingResult)
+    {
+        if (bindingResult.hasErrors())
+        {
+            log.warn("{} - {}", ApiResponseCodeEnum.REQUEST_PARAM_ERROR.getMsg(), baseAPIRequestModel);
+            return new BloombergFinancialDataInfoApiResponse(ApiResponseCodeEnum.REQUEST_PARAM_ERROR.getCode(), ApiResponseCodeEnum.REQUEST_PARAM_ERROR.getMsg());
+        }
+        List<BloombergFinancialDataInfoModel> bloombergFinancialDataInfoModelList = stockMarketCrawler.crawlStockPricePages();
+        if (bloombergFinancialDataInfoModelList != null)
+        {
+            return new BloombergFinancialDataInfoApiResponse(ApiResponseCodeEnum.SUCCESS.getCode(), bloombergFinancialDataInfoModelList);
+        }
+        else
+        {
+            return new BloombergFinancialDataInfoApiResponse(ApiResponseCodeEnum.CRAWLER_RETURNS_EMPTY.getCode(), ApiResponseCodeEnum.CRAWLER_RETURNS_EMPTY.getMsg());
         }
     }
 

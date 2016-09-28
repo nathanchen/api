@@ -1,10 +1,6 @@
 package info.chenqin.service.crawler;
 
-import info.chenqin.apiresponse.crawler.OSChinaIndexPageNewsModel;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * User: nathanchen
@@ -15,17 +11,12 @@ import java.util.List;
  * <p>
  * Description:
  */
-public class CurrencyExchangeCrawlerTest
+public class CurrencyExchangeCrawlerTest extends BloombergFinancialDataPageCrawlerTest
 {
     @Test
-    public void crawlCurrencyExchangeInfoPage() throws Exception
+    public void testCrawlCurrencyExchangeInfoPage() throws Exception
     {
         CurrencyExchangeCrawler currencyExchangeCrawler = new CurrencyExchangeCrawler();
-//        System.out.println(currencyExchangeCrawler == null);
-
-        List<OSChinaIndexPageNewsModel> osChinaIndexPageNewsModelList = new ArrayList<>(20);
-        System.out.println(osChinaIndexPageNewsModelList.isEmpty());
-//        currencyExchangeCrawler.crawlCurrencyExchangeInfoPage();
+        testBloombergFinancialDataInfoModelList(currencyExchangeCrawler.crawlCurrencyExchangeInfoPage());
     }
-
 }
