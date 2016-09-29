@@ -1,6 +1,12 @@
 package info.chenqin.service.crawler;
 
+import info.chenqin.apiresponse.crawler.WeatherForecastDailyInfoModel;
 import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * User: nathanchen
@@ -13,11 +19,12 @@ import org.junit.Test;
  */
 public class YahooWeatherCrawlerTest
 {
-
     @Test
     public void testGetWeather() throws Exception
     {
         YahooWeatherCrawler yahooWeatherCrawler = new YahooWeatherCrawler();
-        yahooWeatherCrawler.getWeather();
+        List<WeatherForecastDailyInfoModel> weatherForecastDailyInfoModelList = yahooWeatherCrawler.getWeather();
+        assertNotNull(weatherForecastDailyInfoModelList);
+        assertTrue(weatherForecastDailyInfoModelList.size() > 0);
     }
 }

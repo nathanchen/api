@@ -1,6 +1,7 @@
 package info.chenqin.service.crawler;
 
 import info.chenqin.apiresponse.crawler.OSChinaIndexPageNewsModel;
+import info.chenqin.util.UserAgentPropertiesHelper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -32,7 +33,7 @@ public class OSChinaIndexPageCrawler
         List<OSChinaIndexPageNewsModel> osChinaIndexPageNewsModelList = new ArrayList<>(20);
         try
         {
-            doc = Jsoup.connect(INDEX_PAGE_URL).userAgent("Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1").get();
+            doc = Jsoup.connect(INDEX_PAGE_URL).userAgent(UserAgentPropertiesHelper.getUserAgent()).get();
             Elements todayNews = doc.select("li.today>a");
             OSChinaIndexPageNewsModel osChinaIndexPageNewsModel;
             String href;

@@ -28,11 +28,11 @@ class BloombergFinancialDataPageCrawlerTest
 
     private void testBloombergFinancialDataInfoModel(BloombergFinancialDataInfoModel bloombergFinancialDataInfoModel)
     {
+        System.out.println(bloombergFinancialDataInfoModel);
         assertNotNull(bloombergFinancialDataInfoModel);
         assertNotNull(bloombergFinancialDataInfoModel.getCurrentValue());
         assertTrue(Double.valueOf(bloombergFinancialDataInfoModel.getCurrentValue()) > 0);
         assertNotNull(bloombergFinancialDataInfoModel.getChangeValue());
-        assertTrue(Double.valueOf(bloombergFinancialDataInfoModel.getChangeValue()) >= 0);
-        System.out.println(bloombergFinancialDataInfoModel);
+        assertTrue(Math.abs(Double.valueOf(bloombergFinancialDataInfoModel.getChangeValue())) >= 0);
     }
 }

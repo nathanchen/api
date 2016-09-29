@@ -1,6 +1,7 @@
 package info.chenqin.service.crawler;
 
 import info.chenqin.apiresponse.crawler.BloombergFinancialDataInfoModel;
+import info.chenqin.util.UserAgentPropertiesHelper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,7 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.Random;
 
 /**
  * User: nathanchen
@@ -22,44 +23,40 @@ import java.util.concurrent.*;
  */
 abstract class BloombergFinancialDataPageCrawler
 {
-    private final ExecutorService threadPoolExecutor = Executors.newFixedThreadPool(3);
-
     List<BloombergFinancialDataInfoModel> crawlFinancialInfoPages(final HashMap<String, String> stockNameUrlMap)
     {
         List<BloombergFinancialDataInfoModel> bloombergFinancialDataInfoModelList = new ArrayList<>();
-        List<Future<BloombergFinancialDataInfoModel>> bloombergFinancialDataInfoModelFutureList = new ArrayList<>();
+        BloombergFinancialDataInfoModel bloombergFinancialDataInfoModel;
         if (null != stockNameUrlMap)
         {
+            Random random = new Random();
             for (String key : stockNameUrlMap.keySet())
             {
-                bloombergFinancialDataInfoModelFutureList.add(getBloombergFinancialDataInfoModel(stockNameUrlMap.get(key)));
-            }
-
-            if (!bloombergFinancialDataInfoModelFutureList.isEmpty())
-            {
-                for (Future<BloombergFinancialDataInfoModel> bloombergFinancialDataInfoModelFuture : bloombergFinancialDataInfoModelFutureList)
+                try
                 {
-                    try
-                    {
-                        bloombergFinancialDataInfoModelList.add(bloombergFinancialDataInfoModelFuture.get());
-                    }
-                    catch (InterruptedException | ExecutionException e)
-                    {
-                        e.printStackTrace();
-                    }
+                    Thread.sleep((random.nextInt(4) + 1) * 1000);
+                }
+                catch (InterruptedException e)
+                {
+                    e.printStackTrace();
+                }
+                bloombergFinancialDataInfoModel = crawlFinancialInfoPage(key, stockNameUrlMap.get(key));
+                if (null != bloombergFinancialDataInfoModel)
+                {
+                    bloombergFinancialDataInfoModelList.add(bloombergFinancialDataInfoModel);
                 }
             }
         }
         return bloombergFinancialDataInfoModelList;
     }
 
-    private BloombergFinancialDataInfoModel crawlFinancialInfoPage(String financial_info_page_url)
+    private BloombergFinancialDataInfoModel crawlFinancialInfoPage(String key, String financial_info_page_url)
     {
         Document doc;
         BloombergFinancialDataInfoModel bloombergFinancialDataInfoModel = null;
         try
         {
-            doc = Jsoup.connect(financial_info_page_url).userAgent("Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1").get();
+            doc = Jsoup.connect(financial_info_page_url).userAgent(UserAgentPropertiesHelper.getUserAgent()).get();
             Element element = doc.select("meta[itemprop=\"price\"]").first();
             String exchangeRate = element.attr("content");
 
@@ -67,6 +64,7 @@ abstract class BloombergFinancialDataPageCrawler
             String changedValue = element.attr("content");
 
             bloombergFinancialDataInfoModel = new BloombergFinancialDataInfoModel();
+            bloombergFinancialDataInfoModel.setName(key);
             bloombergFinancialDataInfoModel.setCurrentValue(exchangeRate);
             bloombergFinancialDataInfoModel.setChangeValue(changedValue);
         }
@@ -75,17 +73,5 @@ abstract class BloombergFinancialDataPageCrawler
             e.printStackTrace();
         }
         return bloombergFinancialDataInfoModel;
-    }
-
-    private Future<BloombergFinancialDataInfoModel> getBloombergFinancialDataInfoModel(final String url)
-    {
-        return threadPoolExecutor.submit(new Callable<BloombergFinancialDataInfoModel>()
-        {
-            @Override
-            public BloombergFinancialDataInfoModel call() throws Exception
-            {
-                return crawlFinancialInfoPage(url);
-            }
-        });
     }
 }

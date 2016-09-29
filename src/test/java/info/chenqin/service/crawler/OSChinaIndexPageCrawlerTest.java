@@ -1,5 +1,13 @@
 package info.chenqin.service.crawler;
 
+import info.chenqin.apiresponse.crawler.OSChinaIndexPageNewsModel;
+import org.junit.Test;
+
+import java.util.List;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 /**
  * User: nathanchen
  * <p/>
@@ -11,4 +19,12 @@ package info.chenqin.service.crawler;
  */
 public class OSChinaIndexPageCrawlerTest
 {
+    @Test
+    public void testCrawlOSChinaIndexPage() throws Exception
+    {
+        OSChinaIndexPageCrawler osChinaIndexPageCrawler = new OSChinaIndexPageCrawler();
+        List<OSChinaIndexPageNewsModel> osChinaIndexPageNewsModelList = osChinaIndexPageCrawler.crawlOSChinaIndexPage();
+        assertNotNull(osChinaIndexPageNewsModelList);
+        assertTrue(osChinaIndexPageNewsModelList.size() > 0);
+    }
 }
