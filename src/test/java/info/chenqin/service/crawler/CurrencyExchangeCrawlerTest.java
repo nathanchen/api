@@ -1,5 +1,6 @@
 package info.chenqin.service.crawler;
 
+import info.chenqin.entity.crawler.CrawlerTaskEntity;
 import org.junit.Test;
 
 /**
@@ -11,8 +12,18 @@ import org.junit.Test;
  * <p>
  * Description:
  */
+
 public class CurrencyExchangeCrawlerTest extends BloombergFinancialDataPageCrawlerTest
 {
+    @Test
+    public void testAddNewTask() throws Exception
+    {
+        CrawlerTaskEntity crawlerTaskEntity = CrawlerTaskEntity.builder()
+                .title("test").url("http://baidyu.com").website("Amazon").build();
+        CurrencyExchangeCrawler currencyExchangeCrawler = new CurrencyExchangeCrawler();
+        currencyExchangeCrawler.addNewTask(crawlerTaskEntity);
+    }
+
     @Test
     public void testCrawlCurrencyExchangeInfoPage() throws Exception
     {

@@ -1,10 +1,12 @@
 package info.chenqin.service.crawler;
 
 import info.chenqin.apiresponse.crawler.BloombergFinancialDataInfoModel;
+import info.chenqin.dao.crawler.ICrawlerTaskDao;
 import info.chenqin.util.UserAgentPropertiesHelper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,6 +25,9 @@ import java.util.Random;
  */
 abstract class BloombergFinancialDataPageCrawler
 {
+    @Autowired
+    ICrawlerTaskDao crawlerTaskDao;
+
     List<BloombergFinancialDataInfoModel> crawlFinancialInfoPages(final HashMap<String, String> stockNameUrlMap)
     {
         List<BloombergFinancialDataInfoModel> bloombergFinancialDataInfoModelList = new ArrayList<>();

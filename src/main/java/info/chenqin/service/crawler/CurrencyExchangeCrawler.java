@@ -1,6 +1,7 @@
 package info.chenqin.service.crawler;
 
 import info.chenqin.apiresponse.crawler.BloombergFinancialDataInfoModel;
+import info.chenqin.entity.crawler.CrawlerTaskEntity;
 import info.chenqin.util.DataPropertiesFileHelper;
 import org.springframework.stereotype.Service;
 
@@ -21,5 +22,10 @@ public class CurrencyExchangeCrawler extends BloombergFinancialDataPageCrawler
     public List<BloombergFinancialDataInfoModel> crawlCurrencyExchangeInfoPage()
     {
         return crawlFinancialInfoPages(DataPropertiesFileHelper.readCurrencyExchangeProperties());
+    }
+
+    public void addNewTask(CrawlerTaskEntity crawlerTaskEntity)
+    {
+        crawlerTaskDao.insertANewTask(crawlerTaskEntity);
     }
 }
