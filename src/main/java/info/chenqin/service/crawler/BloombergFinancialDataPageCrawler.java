@@ -6,8 +6,8 @@ import info.chenqin.util.UserAgentPropertiesHelper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +25,7 @@ import java.util.Random;
  */
 abstract class BloombergFinancialDataPageCrawler
 {
-    @Autowired
+    @Resource
     ICrawlerTaskDao crawlerTaskDao;
 
     List<BloombergFinancialDataInfoModel> crawlFinancialInfoPages(final HashMap<String, String> stockNameUrlMap)
