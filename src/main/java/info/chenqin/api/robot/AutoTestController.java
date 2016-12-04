@@ -1,11 +1,8 @@
 package info.chenqin.api.robot;
 
-import info.chenqin.url.APIURL;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,12 +22,6 @@ import java.util.TimeZone;
 @Controller
 public class AutoTestController
 {
-    @RequestMapping(value = APIURL.API_AUTO_TEST_URL, method = RequestMethod.GET)
-    public void runApiTests()
-    {
-
-    }
-
     void getAllTestClasses()
     {
         File d = new File("");
